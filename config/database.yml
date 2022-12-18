@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 20 } %>
+  host: localhost
+  port: 5432
+
+development:
+  <<: *default
+  database: game_of_life_development
+
+test:
+  <<: *default
+  database: game_of_life_test
+
+production:
+  <<: *default
+  database: game_of_life_production
+  username: game_of_life
+  password: <%= ENV['GAME_OF_LIFE_DATABASE_PASSWORD'] %>
