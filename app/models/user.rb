@@ -9,6 +9,9 @@ class User < ApplicationRecord
 
   has_one :users_session, class_name: 'Users::Session', dependent: :destroy
 
+  has_many :games_users, class_name: '::Games::User', dependent: :destroy
+  has_many :games, through: :games_users
+
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
   def confirmed?
