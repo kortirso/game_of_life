@@ -54,6 +54,41 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: cells; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cells (
+    id bigint NOT NULL,
+    uuid uuid NOT NULL,
+    game_id bigint NOT NULL,
+    games_user_id bigint,
+    q integer DEFAULT 0 NOT NULL,
+    r integer DEFAULT 0 NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: cells_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cells_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cells_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cells_id_seq OWNED BY public.cells.id;
+
+
+--
 -- Name: games; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -64,7 +99,8 @@ CREATE TABLE public.games (
     evolution_type integer DEFAULT 0 NOT NULL,
     current_tick bigint DEFAULT 0 NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    map_size jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -196,6 +232,13 @@ ALTER SEQUENCE public.users_sessions_id_seq OWNED BY public.users_sessions.id;
 
 
 --
+-- Name: cells id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cells ALTER COLUMN id SET DEFAULT nextval('public.cells_id_seq'::regclass);
+
+
+--
 -- Name: games id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -229,6 +272,14 @@ ALTER TABLE ONLY public.users_sessions ALTER COLUMN id SET DEFAULT nextval('publ
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: cells cells_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cells
+    ADD CONSTRAINT cells_pkey PRIMARY KEY (id);
 
 
 --
@@ -269,6 +320,27 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users_sessions
     ADD CONSTRAINT users_sessions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_cells_on_game_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cells_on_game_id ON public.cells USING btree (game_id);
+
+
+--
+-- Name: index_cells_on_games_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cells_on_games_user_id ON public.cells USING btree (games_user_id);
+
+
+--
+-- Name: index_cells_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_cells_on_uuid ON public.cells USING btree (uuid);
 
 
 --
@@ -319,6 +391,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221026162239'),
 ('20221108144820'),
 ('20221219152210'),
-('20221219152839');
+('20221219152839'),
+('20221219164612'),
+('20221219171247');
 
 
