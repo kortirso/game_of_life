@@ -7,8 +7,8 @@ module Games
 
     def call(params:)
       ActiveRecord::Base.transaction do
-        game = create_game(params)
-        generate_cells(game)
+        @result = create_game(params)
+        generate_cells
       end
     end
 
@@ -18,13 +18,13 @@ module Games
       Game.create!(params)
     end
 
-    def generate_cells(game)
+    def generate_cells
       cells = []
-      (0..game.map_size['r']).each do |row|
-        (0..game.map_size['q']).each do |column|
+      (0..@result.map_size['r']).each do |row|
+        (0..@result.map_size['q']).each do |column|
           cells.push({
             uuid: SecureRandom.uuid,
-            game_id: game.id,
+            game_id: @result.id,
             q: column,
             r: row
           })

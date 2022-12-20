@@ -100,7 +100,8 @@ CREATE TABLE public.games (
     current_tick bigint DEFAULT 0 NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    map_size jsonb DEFAULT '{}'::jsonb NOT NULL
+    map_size jsonb DEFAULT '{}'::jsonb NOT NULL,
+    lock_version bigint DEFAULT 0 NOT NULL
 );
 
 
@@ -393,6 +394,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221219152210'),
 ('20221219152839'),
 ('20221219164612'),
-('20221219171247');
+('20221219171247'),
+('20221219172019');
 
 
